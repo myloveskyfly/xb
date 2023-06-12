@@ -10,14 +10,14 @@ function文件夹为6dy本依赖。
 
 **jd_wx_luckdraw.js店铺抽奖运行，所需要依赖如下：**
 
-dylank.js
+function\dylank.js
 
 ------------
 
 **jd_point_exchange积分换豆运行，所需依赖如下：**
 
-krgetToken.js
-
+function\krgetToken.js
+function\krgetSign.js
 function\cache\index.js
 
 ------------
