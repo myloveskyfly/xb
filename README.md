@@ -10,7 +10,7 @@ ql repo https://github.com/myloveskyfly/xb.git "jd_|jx_|jddj_" "backUp" "^jd[^_]
 
 **jd_wx_luckdraw.js店铺抽奖运行，所需要依赖如下：**
 
-- function\dylank.js
+- function\dylanx.js
 
 ------------
 
@@ -22,7 +22,10 @@ ql repo https://github.com/myloveskyfly/xb.git "jd_|jx_|jddj_" "backUp" "^jd[^_]
 
 ------------
 
+**jd_sevenDayjk.js超级无线店铺签到，所需依赖如下：**
 
+USER_AGENTS.js
 
+------------
 ### 变量
 编辑中...........
