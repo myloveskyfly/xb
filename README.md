@@ -1,7 +1,7 @@
 
 ### 拉库
 ```javascript
-ql repo https://github.com/myloveskyfly/xb.git "jd_|jx_|jddj_" "backUp" "^jd[^_]|USER|JD|function|sendNotify|ql"
+ql repo https://github.com/myloveskyfly/xb.git "jd_|m_|" "backUp" "^jd[^_]|USER|function|magic|h5sts|jdCookie|sendNotify|ql"
 ```
 ### 依赖
 ##### function目录为依赖文件夹。
