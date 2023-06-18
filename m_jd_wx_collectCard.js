@@ -7,8 +7,8 @@ $.activityUrl = process.env.M_WX_COLLECT_CARD_URL
     : '';
 //最多几个集卡的，其余只助力
 let leaders = process.env.M_WX_COLLECT_CARD_LEADERS
-    ? process.env.M_WX_COLLECT_CARD_LEADERS * 3
-    : 15;
+    ? process.env.M_WX_COLLECT_CARD_LEADERS * 1
+    : 5;
 if (mode) {
     $.activityUrl = 'https://lzkjdz-isv.isvjcloud.com/wxCollectCard/activity/1193422?activityId=cb4d9c7ca992427db5a52ec1c0bcc42e'
     $.activityUrl = 'https://lzkjdz-isv.isvjcloud.com/wxCollectCard/activity/3839759?activityId=2a47604ff73b47b5b432a06dc2226b70'
@@ -234,5 +234,5 @@ $.after = async function () {
         $.msg.push($.activityUrl);
     }
 }
-$.run({whitelist: ['1-15'], wait: [1000, 3000]}).catch(
+$.run({whitelist: ['1-40'], wait: [1000, 3000]}).catch(
     reason => $.log(reason));
