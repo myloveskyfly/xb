@@ -9,7 +9,7 @@ export jd_cjhy_sevenDay_openCard="1"            设置为1则自动入会 不设
 cron "2 2 29 2 *" jd_cjhy_sevenDay.js
 */
 
-const $ = new Env('cjhy七日签到')
+const $ = new Env('环保_cjhy七日签到')
 
 
 

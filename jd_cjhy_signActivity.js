@@ -9,7 +9,7 @@ export jd_cjhy_signActivity_openCard="1"            设置为1则自动入会 �
 cron "2 2 29 2 *" jd_cjhy_signActivity.js
 */
 
-const $ = new Env('cjhy签到有礼')
+const $ = new Env('环保_cjhy签到有礼')
 
 
 

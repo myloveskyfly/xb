@@ -9,7 +9,7 @@ export jd_lzkj_signActivity2_openCard="1"            设置为1则自动入会 �
 cron "2 2 29 2 *" jd_lzkj_signActivity2.js
 */
 
-const $ = new Env('lzkj签到有礼')
+const $ = new Env('环保_lzkj签到有礼')
 
 
 
