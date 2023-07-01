@@ -14,7 +14,7 @@ ql repo https://github.com/myloveskyfly/xb.git "jd_|m_" "backUp" "function|magic
 
 ------------
 
-**[6D] jd_point_exchange积分换豆运行，所需依赖如下：**
+**积分换豆运行，所需依赖如下：**
 
 - function\krgetToken.js
 - function\krgetSign.js
