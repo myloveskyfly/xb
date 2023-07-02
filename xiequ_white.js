@@ -1,6 +1,7 @@
 /* cron "5,35 * * * *" xiequ_white.js, tag=携趣白名单更新  */
 
 //青龙变量格式参考 export XIEQU_CONFIG="账号名称随意@UID@UKEY@ip1.txt"
+const $ = new Env("携趣白名单更新");
 
 const axios = require('axios');
 const fs = require('fs');
