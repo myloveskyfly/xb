@@ -1,13 +1,14 @@
 /* cron "5,35 * * * *" xiequ_white.js, tag=携趣白名单更新  */
-const $ = new Env('携趣白名单更新v1.5');
+
 //青龙变量格式参考 export XIEQU_CONFIG="账号名称随意@UID@UKEY@ip1.txt"
+
 const axios = require('axios');
 const fs = require('fs');
 const notify = require('./sendNotify')
 const currentDateTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
 // 配置青龙变量参数
-const [No,UID, UKEY, IP_CACHE_FILE] = process.env.XIEQU_CONFIG.split('@');
+const [NO,UID, UKEY, IP_CACHE_FILE] = process.env.XIEQU_CONFIG.split('@');
 // 配置代码参数
 const GET_IP_URL = 'https://www.taobao.com/help/getip.php';
 const CLEAR_WHITE_LIST_URL = `http://op.xiequ.cn/IpWhiteList.aspx?uid=${UID}&ukey=${UKEY}&act=del&ip=all`;
@@ -119,7 +120,7 @@ async function runScript() {
   }
   
   console.log('脚本执行完毕。');
-  await notify.sendNotify(`🎉通知🎉`,`当前外网IP变更为：${currentIP}\n\n${No}✅已同步更新携趣白名单！\n\n通知时间：${currentDateTime}`)
+  await notify.sendNotify(`🎉通知🎉`,`当前外网IP变更为：${currentIP}\n\n账号：${NO}✅已同步更新携趣白名单！\n\n通知时间：${currentDateTime}`)
   
 }
 
