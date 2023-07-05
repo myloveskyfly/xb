@@ -73,9 +73,6 @@ async function checkAccountStatus() {
         const whiteList = await getWhiteList(); // 获取更新后的白名单
         console.log('😀更新后的白名单:', whiteList);
         await notify.sendNotify(`🎉通知🎉`,`当前外网IP变更为：${ip}\n\n账号：🔰${NO}🔰\n\n更新后的白名单为：\n${whiteList}`)
-        console.log('⏲30s后重新检查账号状态！');
-        await new Promise((resolve) => setTimeout(resolve, 30000)); // 30s后重新检查账号状态
-        await checkAccountStatus(); // 重新检查账号状态
       }
     } else if (content.includes('过期')) {
       console.log('🔔账号额度已经用完或者账号已过期！');
@@ -92,7 +89,10 @@ async function checkAccountStatus() {
 
 // 入口函数
 async function main() {
-  await checkAccountStatus();
+  	await checkAccountStatus();
+ 	console.log('⏲30s后重新检查账号状态！');
+	await new Promise((resolve) => setTimeout(resolve, 30000)); // 30s后重新检查账号状态
+	await checkAccountStatus(); // 重新检查账号状态
 }
 
 main();
