@@ -1,128 +1,98 @@
-/* cron "5,35 * * * *" xiequ_white.js, tag=携趣白名单更新  */
-
-//青龙变量格式参考 export XIEQU_CONFIG="账号名称随意@UID@UKEY@ip1.txt"
-
 const axios = require('axios');
-const fs = require('fs');
 const notify = require('./sendNotify')
 
 // 配置青龙变量参数
-const [NO,UID, UKEY, IP_CACHE_FILE] = process.env.XIEQU_CONFIG.split('@');
-// 配置代码参数
-const GET_IP_URL = 'https://www.taobao.com/help/getip.php';
+const [NO, UID, UKEY, VKEY] = process.env.XIEQU_CONFIG.split('@');
+
+const GET_IP_URL = `http://api.xiequ.cn/VAD/GetIp.aspx?act=get&uid=${UID}&vkey=${VKEY}&num=1&time=30&plat=1&re=0&type=0&so=1&ow=1&spl=3&addr=&db=1`;
 const CLEAR_WHITE_LIST_URL = `http://op.xiequ.cn/IpWhiteList.aspx?uid=${UID}&ukey=${UKEY}&act=del&ip=all`;
-const UPDATE_WHITE_LIST_URL = `http://op.xiequ.cn/IpWhiteList.aspx?uid=${UID}&ukey=${UKEY}&act=add&ip=`;
+const ADD_TO_WHITE_LIST_URL = `http://op.xiequ.cn/IpWhiteList.aspx?uid=${UID}&ukey=${UKEY}&act=add`;
 const GET_WHITE_LIST_URL = `http://op.xiequ.cn/IpWhiteList.aspx?uid=${UID}&ukey=${UKEY}&act=get`;
 
+
 // 设置请求的User-Agent头，以伪装成浏览器请求
-axios.defaults.headers.common['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36';
+axios.defaults.headers.common['User-Agent'] =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36';
 
 // 获取当前外网IP的函数
 async function getPublicIP() {
   try {
     const response = await axios.get(GET_IP_URL);
     const ip = response.data.match(/\d+\.\d+\.\d+\.\d+/)[0];
+    console.log('😀获取到当前外网IP:', ip); //显示获取到的IP
     return ip;
   } catch (error) {
-    console.error('获取外网IP失败:', error.message);
+    console.error('🔔获取当前外网IP失败:', error.message);
     return null;
   }
 }
 
-// 读取上次缓存的IP的函数
-function getLastCachedIP() {
-  try {
-    const ip = fs.readFileSync(IP_CACHE_FILE, 'utf8');
-		if (ip) {
-			console.log('上次缓存的外网IP:', ip);
-			return ip.trim();
-		} else {
-			console.log('没有找到上次缓存的外网IP。');
-			return null;
-		}
-  } catch (error) {
-    console.error('读取ip1.txt文件失败:', error.message);
-    return null;
-  }
-}
-
-// 将当前IP缓存到文件的函数
-function cacheIP(ip) {
-  fs.writeFile(IP_CACHE_FILE, ip, 'utf8', (err) => {
-    if (err) {
-      console.error('😂写入ip1.txt文件失败:', err.message);
-    } else {
-      console.log('✔当前外网IP已成功保存到ip1.txt文件。');
-    }
-  });
-}
-
-// 发送请求清空携趣白名单的函数
-async function clearXiequWhiteList() {
+// 清空白名单函数
+async function clearWhiteList() {
   try {
     await axios.get(CLEAR_WHITE_LIST_URL);
-    console.log('✔携趣白名单已清空。');
+    console.log('✅已清空白名单');
   } catch (error) {
-    console.error('😂清空携趣白名单失败:', error.message);
+    console.error('🔔清空白名单失败:', error.message);
   }
 }
 
-// 发送请求更新携趣白名单的函数
-async function updateXiequWhiteList(ip) {
-  const updateUrl = `${UPDATE_WHITE_LIST_URL}${ip}`;
-
+// 更新白名单函数
+async function addToWhiteList(ip) {
   try {
-    await axios.get(updateUrl);
-    console.log('✔携趣白名单已更新为最新的外网IP。');
+    await axios.get(`${ADD_TO_WHITE_LIST_URL}&ip=${ip}`);
+    console.log('✅已更新白名单');
   } catch (error) {
-    console.error('😂更新携趣白名单失败:', error.message);
+    console.error('🔔更新白名单失败:', error.message);
   }
 }
 
-// 发送请求获取更新后的携趣白名单的函数
-async function getXiequWhiteList() {
+// 获取白名单函数
+async function getWhiteList() {
   try {
     const response = await axios.get(GET_WHITE_LIST_URL);
-    console.log('✔更新后的携趣白名单:', response.data);
+    return response.data; // 返回白名单数据
   } catch (error) {
-    console.error('😂获取更新后的携趣白名单失败:', error.message);
+    console.error('🔔获取白名单失败:', error.message);
+    return null;
   }
 }
 
-// 执行脚本的函数
-async function runScript() {
-  console.log('开始执行脚本...');
-
-  const currentIP = await getPublicIP();
-  if (currentIP) {
-    console.log('当前外网IP:', currentIP);
-
-    const lastCachedIP = getLastCachedIP();
-    if (lastCachedIP === currentIP) {
-      console.log('✔当前外网IP与上次缓存的IP一致，停止执行。');
-      process.exit();
+async function checkAccountStatus() {
+  try {
+    const response = await axios.get(GET_IP_URL);
+    const content = response.data;
+    if (content.match(/^\d+\.\d+\.\d+\.\d+:\d+$/)) {
+      console.log('✅账号状态正常');
+    } else if (content.includes('白名单')) {
+      console.log('🔔需要更新白名单');
+      const ip = await getPublicIP();
+      if (ip) {
+        await clearWhiteList();
+        await addToWhiteList(ip);
+        const whiteList = await getWhiteList(); // 获取更新后的白名单
+        console.log('😀更新后的白名单:', whiteList);
+        await notify.sendNotify(`🎉通知🎉`,`当前外网IP变更为：${ip}\n\n账号：🔰${NO}🔰\n\n更新后的白名单为：\n${whiteList}`)
+        console.log('⏲30s后重新检查账号状态！');
+        await new Promise((resolve) => setTimeout(resolve, 30000)); // 30s后重新检查账号状态
+        await checkAccountStatus(); // 重新检查账号状态
+      }
+    } else if (content.includes('过期')) {
+      console.log('🔔账号额度已经用完或者账号已过期！');
+      await notify.sendNotify(`⚠通知⚠`,`\n\n账号：🔰${NO}🔰额度已经用完或者账户已过期！`)
     } else {
-      console.log('✔当前外网IP与上次缓存的IP不一致，开始执行更新操作。');
-
-      console.log('⏱清空携趣白名单...');
-      await clearXiequWhiteList();
-
-      console.log('⏱开始更新携趣白名单...');
-      await updateXiequWhiteList(currentIP);
-
-      console.log('⏱开始获取更新后的携趣白名单...');
-      await getXiequWhiteList();
-
-      console.log('⏱开始缓存当前外网IP到ip1.txt文件...');
-      cacheIP(currentIP);
+      console.log('🔔无法解析账号状态');
+      await notify.sendNotify(`🔔通知🔔`,`携趣代理更新无法解析账号状态!`)
     }
+  } catch (error) {
+    console.error('🔔检查账号状态失败:', error.message);
+    await notify.sendNotify(`🔔通知🔔`,`携趣代理更新检查账号状态失败！`)
   }
-  
-  console.log('脚本执行完毕。');
-  await notify.sendNotify(`🎉通知🎉`,`当前外网IP变更为：${currentIP}\n\n账号：${NO}✅已同步更新携趣白名单！`)
-  
 }
 
+// 入口函数
+async function main() {
+  await checkAccountStatus();
+}
 
-// 执行脚本
-runScript();
+main();
