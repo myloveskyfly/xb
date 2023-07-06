@@ -31,7 +31,7 @@ async function getPublicIP() {
 async function clearWhiteList() {
   try {
     await axios.get(CLEAR_WHITE_LIST_URL);
-    console.log('✅执行清空白名单');
+    console.log('✅已清空白名单');
   } catch (error) {
     console.error('🔔清空白名单失败:', error.message);
   }
@@ -41,7 +41,7 @@ async function clearWhiteList() {
 async function addToWhiteList(ip) {
   try {
     await axios.get(`${ADD_TO_WHITE_LIST_URL}&ip=${ip}`);
-    console.log('✅执行更新白名单');
+    console.log('✅已更新白名单');
   } catch (error) {
     console.error('🔔更新白名单失败:', error.message);
   }
@@ -63,7 +63,7 @@ async function checkAccountStatus() {
     const response = await axios.get(GET_IP_URL);
     const content = response.data;
     if (content.match(/^\d+\.\d+\.\d+\.\d+:\d+$/)) {
-      console.log('✅账号🔰${NO}🔰状态正常');
+      console.log('✅账号状态正常');
     } else if (content.includes('白名单')) {
       console.log('🔔需要更新白名单');
       const ip = await getPublicIP();
@@ -72,25 +72,25 @@ async function checkAccountStatus() {
         await addToWhiteList(ip);
         const whiteList = await getWhiteList(); // 获取更新后的白名单
         console.log('😀更新后的白名单:', whiteList);
-        await notify.sendNotify(`🎉通知🎉`,`当前外网IP变更为：\n${ip}\n\n账号：🔰${NO}🔰\n\n更新后的白名单为：\n${whiteList}`)
+        await notify.sendNotify(`🎉通知🎉`,`当前外网IP变更为：${ip}\n\n账号：🔰${NO}🔰\n\n更新后的白名单为：\n${whiteList}`)
       }
     } else if (content.includes('过期')) {
-      console.log('🔔账号🔰${NO}🔰额度已经用完或者账号已过期！');
+      console.log('🔔账号额度已经用完或者账号已过期！');
       await notify.sendNotify(`⚠通知⚠`,`\n\n账号：🔰${NO}🔰额度已经用完或者账户已过期！`)
     } else {
       console.log('🔔无法解析账号状态');
-      await notify.sendNotify(`🔔通知🔔`,`携趣代理更新：无法解析账号🔰${NO}🔰状态!`)
+      await notify.sendNotify(`🔔通知🔔`,`携趣代理更新无法解析账号状态!`)
     }
   } catch (error) {
-    console.error('🔔检查账号${NO}状态失败:', error.message);
-    await notify.sendNotify(`🔔通知🔔`,`携趣代理更新：检查账号🔰${NO}🔰状态失败！`)
+    console.error('🔔检查账号状态失败:', error.message);
+    await notify.sendNotify(`🔔通知🔔`,`携趣代理更新检查账号状态失败！`)
   }
 }
 
 // 入口函数
 async function main() {
   	await checkAccountStatus();
- 	console.log('⏲30s后重新检查账号🔰${NO}🔰状态！');
+ 	console.log('⏲30s后重新检查账号状态！');
 	await new Promise((resolve) => setTimeout(resolve, 30000)); // 30s后重新检查账号状态
 	await checkAccountStatus(); // 重新检查账号状态
 }
