@@ -1,3 +1,6 @@
+//携趣白名单更新 uid和vkey在白名单管理接口能查到，ukey在api提取链接内包含
+//参考定时 5,35 * * * *
+//变量 export XIEQU_CONFIG=“备注@uid@ukey@vkey”
 const axios = require('axios');
 const sendNotify = require('./sendNotify');
 
@@ -81,7 +84,7 @@ async function checkAccountStatus() {
       }
     } else if (content.includes('过期')) {
       console.log('🔔账号额度已经用完或者账号已过期！');
-      await sendNotify.sendNotify(`⚠通知⚠`,`账号：💎${USER}💎\n额度已经用完或者账户已过期！`);
+      await sendNotify.sendNotify(`⚠通知⚠`,`账号：💎${USER}💎\n产品额度已经用完或者已过期！`);
     } else {
       console.log('🔔无法解析账号状态');
       await sendNotify.sendNotify(`🔔通知🔔`,`携趣代理更新：无法解析账号💎${USER}💎状态!`);
