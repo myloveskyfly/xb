@@ -1,4 +1,4 @@
-// 携趣白名单更新 uid和vkey在白名单管理接口能查到，ukey在api提取链接内包含
+// 携趣白名单更新 uid和ukey在白名单管理接口能查到，vkey在api提取链接内包含
 // 参考定时 5,35 * * * *
 // 变量 export XIEQU_CONFIG=“备注@uid@ukey@vkey”
 const axios = require('axios');
