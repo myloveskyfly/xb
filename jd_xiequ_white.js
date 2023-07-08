@@ -73,7 +73,7 @@ async function checkAccountStatus() {
       console.log('🔔账号额度已经用完或者账号已过期！');
       await sendNotify.sendNotify(`⚠通知⚠`, `账号：💎${USER}💎\n产品额度已经用完或者已过期！`);
     } else if (content.includes('Err')) {
-      console.log('❗账号信息配置有误');
+      console.log('⛔账号信息配置有误');
       await sendNotify.sendNotify(`⚠通知⚠`, `账号：💎${USER}💎\n账号信息配置有误！`);
     } else {
       console.log('✅账号状态正常');
@@ -85,8 +85,13 @@ async function checkAccountStatus() {
 }
 
 
-// 入口函数
 async function main() {
+  // 检查 process.env.XIEQU_CONFIG 变量是否存在
+  if (!process.env.XIEQU_CONFIG) {
+    console.log('未发现 XIEQU_CONFIG 环境变量，请检查相关配置。');
+    return;
+  }
+  
   const NO = process.env.XIEQU_CONFIG.split('@')[0];
   console.log('💎当前账号名称为：', NO + '\n');
 
@@ -100,13 +105,16 @@ async function main() {
     } else {
 	  await clearWhiteList();
       await addToWhiteList(ip);
-      await sendNotify.sendNotify(`🎉携趣白名单更新通知🎉`,`当前外网IP变更为：\n${ip}\n\n账号：💎${USER}💎\n\n已更新白名单！`);
+      await getWhiteList();
+      const whiteList = await getWhiteList();
+      console.log('🔄更新后的白名单IP:', whiteList);
+      await sendNotify.sendNotify(`🎉携趣白名单更新通知🎉`, `当前外网IP变更为：\n${ip}\n\n💎账号：${USER}💎\n\n更新白名单地址为：\n${whiteList}`);
       console.log('⏲5s后重新检查账号状态！');
 	  await new Promise((resolve) => setTimeout(resolve, 5000)); // 5s后重新检查账号状态
       await checkAccountStatus();
-
     }
   }
 }
+
 
 main();
