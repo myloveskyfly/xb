@@ -2,7 +2,7 @@
 let mode = __dirname.includes('magic')
 const {Env} = mode ? require('./magic') : require('./magic')
 
-const $ = new Env('M关注有礼2-LM');
+const $ = new Env('M关注有礼-By落幕');
 $.followShopArgv = process.env.M_FOLLOW_SHOP_ARGV
     ? process.env.M_FOLLOW_SHOP_ARGV
     : '';
