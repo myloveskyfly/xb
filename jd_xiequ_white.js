@@ -105,8 +105,8 @@ async function main() {
     } else {
 	  await clearWhiteList();
       await addToWhiteList(ip);
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // 5s后获取更新后白名单IP
       console.log('⏲5s后获取更新后白名单IP！');
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // 5s后获取更新后白名单IP
       await getWhiteList();
       const whiteList = await getWhiteList();
       console.log('🔄更新后的白名单IP:', whiteList);
