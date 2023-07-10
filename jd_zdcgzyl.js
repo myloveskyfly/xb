@@ -1,4 +1,3 @@
-/* cron:1 1 1 1 * */
 //by https://raw.githubusercontent.com/baquanluomu/botxb/4b311418230832dec2a82d70b42c66ec5d5bc924/jd_zdcgzyl.js
 let mode = __dirname.includes('magic')
 const {Env} = mode ? require('./magic') : require('./magic')
