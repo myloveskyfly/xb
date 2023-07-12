@@ -1,6 +1,6 @@
 // noinspection DuplicatedCode
 let mode = __dirname.includes('magic')
-const {Env} = mode ? require('../magic') : require('./magic')
+const {Env} = mode ? require('../magic_eve') : require('./magic_eve')
 const $ = new Env('M购物车锦鲤');
 $.activityUrl = decodeURIComponent(process.argv.splice(2)?.[0] || process.env.M_WX_CARTKOI_URL)
 if (mode) {

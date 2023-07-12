@@ -1,5 +1,5 @@
 let mode = __dirname.includes('magic')
-const {Env, cheerio} = mode ? require('../magic') : require('./magic')
+const {Env, cheerio} = mode ? require('../magic_eve') : require('./magic_eve')
 const $ = new Env('M邀请有礼JINGGENG');
 $.activityUrl = decodeURIComponent(process.argv.splice(2)?.[0] || process.env.M_JINGGENG_INVITE_URL)
 if (mode) {

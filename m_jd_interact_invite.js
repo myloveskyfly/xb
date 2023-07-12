@@ -1,5 +1,5 @@
 let mode = __dirname.includes('magic')
-const {Env} = mode ? require('../magic') : require('./magic')
+const {Env} = mode ? require('../magic_eve') : require('./magic_eve')
 const $ = new Env('M邀请有礼INTERACT');
 $.activityUrl = decodeURIComponent(process.argv.splice(2)?.[0] || process.env.M_INTERACT_INVITE_URL);
 if (mode) {

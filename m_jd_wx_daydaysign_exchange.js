@@ -1,6 +1,6 @@
 //58 20 * * * m_jd_wx_daydaysign_exchange.js
 let mode = __dirname.includes('magic')
-const {Env} = mode ? require('./magic') : require('./magic')
+const {Env} = mode ? require('./magic_eve') : require('./magic_eve')
 const $ = new Env('M天天签到兑换');
 //要兑换的奖品名称，支持模糊匹配，默认兑换京豆
 let exchangeList = process.env?.M_DAYDAYSIGN_EXCHANGE ||"京豆"
