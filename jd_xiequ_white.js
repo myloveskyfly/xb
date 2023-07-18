@@ -110,7 +110,18 @@ async function main() {
       await getWhiteList();
       const whiteList = await getWhiteList();
       console.log('🔄更新后的白名单IP:', whiteList);
-      await sendNotify.sendNotify(`🎉携趣白名单更新通知🎉`, `当前外网IP变更为：\n${ip}\n\n💎账号：${USER}💎\n\n更新白名单地址为：\n${whiteList}`);
+      
+      //通知中的IP地址不进行脱敏处理
+      //await sendNotify.sendNotify(`🎉携趣白名单更新通知🎉`, `当前外网IP变更为：\n${ip}\n\n💎账号：${USER}💎\n\n更新白名单地址为：\n${whiteList}`);
+      
+      //通知中的IP地址进行脱敏处理
+      const maskedIp = ip.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.$2.***.$4");
+	  const maskedWhiteList = whiteList.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.$2.***.$4");
+		await sendNotify.sendNotify(
+		  `🎉携趣白名单更新通知🎉`,
+		  `当前外网IP变更为：\n${maskedIp}\n\n💎账号：${USER}💎\n\n更新白名单地址为：\n${maskedWhiteList}`
+		);
+
       console.log('⏲5s后重新检查账号状态！');
 	  await new Promise((resolve) => setTimeout(resolve, 5000)); // 5s后重新检查账号状态
       await checkAccountStatus();
