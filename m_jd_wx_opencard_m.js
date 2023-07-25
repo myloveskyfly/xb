@@ -1,5 +1,5 @@
 let mode = __dirname.includes('magic')
-const {Env, cheerio} = mode ? require('../magic') : require('./magic')
+const {Env, cheerio} = mode ? require('../magic_eve') : require('./magic_eve')
 const $ = new Env('M开卡M');
 $.activityUrl = decodeURIComponent(process.argv.splice(2)?.[0] || process.env.M_WX_OPENCARD_M_URL)
 if (mode) {
