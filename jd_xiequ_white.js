@@ -80,7 +80,7 @@ async function checkAccountStatus() {
     }
   } catch (error) {
     console.error('🔔检查账号状态失败:', error.message);
-    await sendNotify.sendNotify(`🔔通知🔔`, `携趣代理更新：\n检查账号💎${USER}💎状态失败！`);
+    await sendNotify.sendNotify(`🔔通知🔔`, `携趣代理更新：\n检查账号：💎${USER}💎状态失败！`);
   }
 }
 
@@ -119,7 +119,7 @@ async function main() {
 	  const maskedWhiteList = whiteList.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.$2.***.$4");
 		await sendNotify.sendNotify(
 		  `🎉携趣白名单更新通知🎉`,
-		  `当前外网IP变更为：\n${maskedIp}\n\n💎账号：${USER}💎\n\n更新白名单地址为：\n${maskedWhiteList}`
+		  `当前外网IP变更为：\n${maskedIp}\n\n账号：💎${USER}💎\n\n更新白名单地址为：\n${maskedWhiteList}`
 		);
 
       console.log('⏲5s后重新检查账号状态！');
