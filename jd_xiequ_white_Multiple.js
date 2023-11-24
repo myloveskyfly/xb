@@ -76,7 +76,9 @@ async function checkAccountStatus(account) {
     console.log('套餐数量:', jsonData.data[0].num);
     console.log('已使用数量:', jsonData.data[0].use);
     console.log('截止日期:', jsonData.data[0].enddate);
-    console.log('是否有效:', jsonData.data[0].valid);
+    //console.log('是否有效:', jsonData.data[0].valid);
+    //添加换行
+    console.log('是否有效:', jsonData.data[0].valid + '\n');
     return useValue;
   })
 		.catch(error => {
