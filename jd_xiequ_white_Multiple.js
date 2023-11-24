@@ -1,6 +1,7 @@
 // 携趣白名单更新 uid和ukey在白名单管理接口能查到
 // 参考定时 5,35 * * * *
 // 变量 export XIEQU_CONFIG=“账号1备注@uid@ukey;账号2备注@uid@ukey;账号3备注@uid@ukey”
+const $ = new Env('携趣白名单更新多账号版');
 const axios = require('axios');
 const sendNotify = require('./sendNotify');
 
@@ -145,6 +146,8 @@ async function main() {
         await updateWhitelist(account, currentIP);
 				console.log('✅IP地址发生变化，已更新白名单。');
         // 更新白名单后立即获取最新的白名单信息并进行打印
+        console.log('8s后重新获取白名单地址');
+		await new Promise(resolve => setTimeout(resolve, 8000));
         const updatedWhitelist = await getWhitelist(account);
         console.log('✅更新后的白名单地址为：', updatedWhitelist); 
         const maskedIp = currentIP.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.$2.***.$4");
