@@ -2,6 +2,7 @@
 // 参考定时 5,35 * * * *
 // 变量 export XIEQU_CONFIG=“账号1备注@uid@ukey;账号2备注@uid@ukey;账号3备注@uid@ukey”
 //const $ = new Env('携趣白名单更新多账号版');
+/* 5,35 * * * * jd_xiequ_white_Multiple.js */
 const axios = require('axios');
 const sendNotify = require('./sendNotify');
 
