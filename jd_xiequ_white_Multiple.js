@@ -77,8 +77,6 @@ async function checkAccountStatus(account) {
     console.log('套餐数量:', jsonData.data[0].num);
     console.log('已使用数量:', jsonData.data[0].use);
     console.log('截止日期:', jsonData.data[0].enddate);
-    //console.log('是否有效:', jsonData.data[0].valid);
-    //添加换行
     console.log('是否有效:', jsonData.data[0].valid + '\n');
     return useValue;
   })
@@ -148,7 +146,7 @@ async function main() {
 				await clearWhitelist(account);
         await updateWhitelist(account, currentIP);
 				console.log('✅IP地址发生变化，已更新白名单。');
-        // 更新白名单后立即获取最新的白名单信息并进行打印
+        // 更新白名单后8s获取最新的白名单信息并进行打印
         console.log('8s后重新获取白名单地址');
 		await new Promise(resolve => setTimeout(resolve, 8000));
         const updatedWhitelist = await getWhitelist(account);
