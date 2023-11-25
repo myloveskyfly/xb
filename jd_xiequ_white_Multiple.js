@@ -109,7 +109,7 @@ async function main() {
 			currentAccountIndex++;
 			if (currentAccountIndex < accounts.length) {
 				console.log(`切换到下一个账号：${accounts[currentAccountIndex][0]}`);
-		        console.log('8s后切换到下一个账号');
+		        console.log('⏰8s后切换到下一个账号');
 		        await new Promise(resolve => setTimeout(resolve, 8000));
 				await main();
 			} else {
@@ -126,7 +126,7 @@ async function main() {
 				currentAccountIndex++; // 切换到下一个账号
 				if (currentAccountIndex < accounts.length) {
 					console.log(`切换到下一个账号：${accounts[currentAccountIndex][0]}`);
-			        console.log('8s后切换到下一个账号');
+			        console.log('⏰8s后切换到下一个账号');
 			        await new Promise(resolve => setTimeout(resolve, 8000));
 					await main();
 				} else {
@@ -144,15 +144,15 @@ async function main() {
 			} else {
 				console.log('🔔当前IP不在白名单中，清空白名单并更新IP...');
 				await clearWhitelist(account);
-        await updateWhitelist(account, currentIP);
+        		await updateWhitelist(account, currentIP);
 				console.log('✅IP地址发生变化，已更新白名单。');
-        // 更新白名单后8s获取最新的白名单信息并进行打印
-        console.log('8s后重新获取白名单地址');
-		await new Promise(resolve => setTimeout(resolve, 8000));
-        const updatedWhitelist = await getWhitelist(account);
-        console.log('✅更新后的白名单地址为：', updatedWhitelist); 
-        const maskedIp = currentIP.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.$2.***.$4");
-	      const maskedWhiteList = updatedWhitelist.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.$2.***.$4");
+		        // 更新白名单后8s获取最新的白名单信息并进行打印
+		        console.log('⏰8s后重新获取白名单地址');
+				await new Promise(resolve => setTimeout(resolve, 8000));
+		        const updatedWhitelist = await getWhitelist(account);
+		        console.log('✅更新后的白名单地址为：', updatedWhitelist); 
+		        const maskedIp = currentIP.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.$2.***.$4");
+	      		const maskedWhiteList = updatedWhitelist.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.$2.***.$4");
 		    await sendNotify.sendNotify(
 		    `🎉携趣白名单更新通知🎉`,
 		    `当前外网IP变更为：\n${maskedIp}\n\n账号：💎${USER}💎\n\n更新白名单地址为：\n${maskedWhiteList}`
@@ -164,8 +164,8 @@ async function main() {
 		currentAccountIndex++;
 		if (currentAccountIndex < accounts.length) {
 		console.log(`切换到下一个账号：${accounts[currentAccountIndex][0]}`);
-	      console.log('8s后切换到下一个账号');
-	      await new Promise(resolve => setTimeout(resolve, 8000));
+	    console.log('⏰8s后切换到下一个账号');
+	    await new Promise(resolve => setTimeout(resolve, 8000));
 			await main();
 		} else {
 			console.log('⛔所有账号状态异常，停止执行。');
