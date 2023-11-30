@@ -15,7 +15,7 @@ async function getExternalIP() {
   try {
     const response = await axios.get('https://www.taobao.com/help/getip.php');
     const ip = response.data.match(/\d+\.\d+\.\d+\.\d+/)[0];
-    console.log('😀获取当前外网IP:', ip); //显示获取到的IP
+    console.log('🔗获取当前外网IP:', ip); //显示获取到的IP
     return ip;
   } catch (error) {
     console.error('🔔获取当前外网IP失败:', error.message);
