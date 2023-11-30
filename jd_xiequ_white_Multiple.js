@@ -10,7 +10,7 @@ const sendNotify = require('./sendNotify');
 const accounts = process.env.XIEQU_CONFIG.split(';').map(account => account.split('@'));
 let currentAccountIndex = 0;
 
-
+// 获取外网IP的逻辑...
 async function getExternalIP() {
   try {
     const response = await axios.get('https://www.taobao.com/help/getip.php');
@@ -23,21 +23,23 @@ async function getExternalIP() {
   }
 }
 
-async function clearWhitelist(account) {
-	const [USER, UID, UKEY] = account;
-	// 清空白名单的逻辑...
+// 清空白名单的逻辑...
+async function clearWhitelist() {
+  for (const account of accounts) {
+    const [USER, UID, UKEY] = account;
     try {
-    console.log('✅执行清空白名单');
-    await axios.get(`http://op.xiequ.cn/IpWhiteList.aspx?uid=${UID}&ukey=${UKEY}&act=del&ip=all`);
-    console.log('✅清空白名单成功');
-  } catch (error) {
-    console.error('🔔清空白名单失败:', error.message);
+      console.log(`⏰清空 ${USER} 的白名单`);
+      await axios.get(`http://op.xiequ.cn/IpWhiteList.aspx?uid=${UID}&ukey=${UKEY}&act=del&ip=all`);
+      console.log(`✅账号 ${USER} 的白名单清空成功`);
+    } catch (error) {
+      console.error(`🔔账号 ${USER} 的白名单清空失败:`, error.message);
+    }
   }
 }
 
+// 获取白名单列表的逻辑...
 async function getWhitelist(account) {
 	const [USER, UID, UKEY] = account;
-	// 获取白名单列表的逻辑...
 	try {
 		const response = await axios.get(`http://op.xiequ.cn/IpWhiteList.aspx?uid=${UID}&ukey=${UKEY}&act=get`);
 		return response.data; // 返回白名单数据
@@ -47,10 +49,9 @@ async function getWhitelist(account) {
 	}
 }
 
-
+// 更新白名单的逻辑...
 async function updateWhitelist(account, ip) {
 	const [USER, UID, UKEY] = account;
-	// 更新白名单的逻辑...
     try {
     console.log('✅执行更新白名单');
     await axios.get(`http://op.xiequ.cn/IpWhiteList.aspx?uid=${UID}&ukey=${UKEY}&act=add&ip=${ip}`);
@@ -60,9 +61,9 @@ async function updateWhitelist(account, ip) {
   }
 }
 
+// 检查账号状态的逻辑...
 async function checkAccountStatus(account) {
 	const [USER, UID, UKEY] = account;
-	// 检查账号状态的逻辑...
 	return axios.get('http://op.xiequ.cn/ApiUser.aspx?act=suitdt', {
 			params: {
 				uid: UID,
@@ -105,7 +106,7 @@ async function main() {
 		const useValue = await checkAccountStatus(account);
 		if (useValue > 950 || useValue === 1000) {
 			console.log('⛔账号已过期，清空白名单并切换到下一个账号...');
-			await clearWhitelist(account);
+			await clearWhitelist();
 			currentAccountIndex++;
 			if (currentAccountIndex < accounts.length) {
 				console.log(`切换到下一个账号：${accounts[currentAccountIndex][0]}`);
