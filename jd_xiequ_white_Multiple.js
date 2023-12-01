@@ -82,7 +82,7 @@ async function checkAccountStatus(account) {
     return useValue;
   })
 		.catch(error => {
-			if (error.response && error.response.status === 500) {
+			if (jsonData.data[0].ERR || response.status === 500) {
 				console.error(`账号 ${USER} 配置错误或者服务器异常`);
 			} else {
 				console.error(`账号 ${USER} 请求遇到问题:`, error);
@@ -104,7 +104,7 @@ async function main() {
 	console.log('💎当前账号名称为：', USER + '\n');
 	try {
 		const useValue = await checkAccountStatus(account);
-		if (useValue > 950 || useValue === 1000) {
+		if (useValue && (useValue > 950 || useValue === 1000)) {
 			console.log('⛔账号已过期，清空白名单并切换到下一个账号...');
 			await clearWhitelist();
 			currentAccountIndex++;
@@ -122,21 +122,6 @@ async function main() {
 			const currentIP = await getExternalIP();
 			// console.log('获取到的当前IP地址为：', currentIP); // 添加打印语句
 			const whitelist = await getWhitelist(account); // 传入账号信息
-			if (whitelist && (whitelist.includes('System') || whitelist.includes('ERR') || whitelist.includes('输入字符串的格式不正确'))) {
-				console.log('⛔账号信息配置有误，请检查相关配置。');
-				currentAccountIndex++; // 切换到下一个账号
-				if (currentAccountIndex < accounts.length) {
-					console.log(`切换到下一个账号：${accounts[currentAccountIndex][0]}`);
-			        console.log('⏰8s后切换到下一个账号');
-			        await new Promise(resolve => setTimeout(resolve, 8000));
-					await main();
-				} else {
-					console.log('⛔所有账号状态异常，停止执行。');
-          await sendNotify.sendNotify(`🎉携趣白名单更新通知🎉`, `⛔所有账号状态异常，停止执行。`);
-				}
-				return; // 结束当前流程
-			}
-
 			console.log('✅获取到的白名单为：', whitelist); //打印当前白名单地址信息
 
 			if (whitelist && whitelist.includes(currentIP)) { // 检查 whitelist 是否存在再进行 includes 操作
@@ -161,7 +146,7 @@ async function main() {
 			}
 		}
 	} catch (error) {
-		console.error(`账号 ${USER} 发生错误：`, error.message);
+		console.error(`⚠️账号 ${USER} 配置错误或过期：`, error.message);
 		currentAccountIndex++;
 		if (currentAccountIndex < accounts.length) {
 		console.log(`切换到下一个账号：${accounts[currentAccountIndex][0]}`);
