@@ -104,8 +104,6 @@ async function main() {
 	console.log('💎当前账号名称为：', USER + '\n');
 	try {
 		const useValue = await checkAccountStatus(account);
-		if (!isNaN(useValue) && (useValue > 950 || useValue === 1000)) {
-			console.log('⛔账号已过期，清空白名单并切换到下一个账号...');
 		if (!isNaN(useValue) && (useValue > 950 && useValue < 1000)) {
 			console.log('⛔账号额度即将耗尽，清空白名单并切换到下一个账号...');
 			await clearWhitelist();
