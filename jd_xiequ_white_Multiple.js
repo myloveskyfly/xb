@@ -109,7 +109,7 @@ async function main() {
 			await clearWhitelist();
 			currentAccountIndex++;
 			if (currentAccountIndex < accounts.length) {
-				console.log(`切换到下一个账号：${accounts[currentAccountIndex][0]}`);
+				console.log(`🔄切换到下一个账号：${accounts[currentAccountIndex][0]}`);
 		        console.log('⏰8s后切换到下一个账号');
 		        await new Promise(resolve => setTimeout(resolve, 8000));
 				await main();
@@ -137,8 +137,8 @@ async function main() {
 				await new Promise(resolve => setTimeout(resolve, 8000));
 		        const updatedWhitelist = await getWhitelist(account);
 		        console.log('✅更新后的白名单地址为：', updatedWhitelist); 
-		        const maskedIp = currentIP.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.$2.***.$4");
-	      		const maskedWhiteList = updatedWhitelist.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.$2.***.$4");
+		        const maskedIp = currentIP.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.***.$3.$4");
+	      		const maskedWhiteList = updatedWhitelist.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.***.$3.$4");
 		    await sendNotify.sendNotify(
 		    `🎉携趣白名单更新通知🎉`,
 		    `当前外网IP变更为：\n${maskedIp}\n\n账号：💎${USER}💎\n\n更新白名单地址为：\n${maskedWhiteList}`
@@ -149,13 +149,13 @@ async function main() {
 		console.error(`⚠️账号 ${USER} 配置错误或过期：`, error.message);
 		currentAccountIndex++;
 		if (currentAccountIndex < accounts.length) {
-		console.log(`切换到下一个账号：${accounts[currentAccountIndex][0]}`);
+		console.log(`🔄切换到下一个账号：${accounts[currentAccountIndex][0]}`);
 	    console.log('⏰8s后切换到下一个账号');
 	    await new Promise(resolve => setTimeout(resolve, 8000));
 			await main();
 		} else {
 			console.log('⛔所有账号状态异常，停止执行。');
-      await sendNotify.sendNotify(`🎉携趣白名单更新通知🎉`, `⛔所有账号状态异常，停止执行。`);
+      		await sendNotify.sendNotify(`🎉携趣白名单更新通知🎉`, `⛔所有账号状态异常，停止执行。`);
 		}
 	}
 }
