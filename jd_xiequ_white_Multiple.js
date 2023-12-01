@@ -106,6 +106,8 @@ async function main() {
 		const useValue = await checkAccountStatus(account);
 		if (!isNaN(useValue) && (useValue > 950 || useValue === 1000)) {
 			console.log('⛔账号已过期，清空白名单并切换到下一个账号...');
+		if (!isNaN(useValue) && (useValue > 950 && useValue < 1000)) {
+			console.log('⛔账号额度即将耗尽，清空白名单并切换到下一个账号...');
 			await clearWhitelist();
 			currentAccountIndex++;
 			if (currentAccountIndex < accounts.length) {
@@ -126,7 +128,7 @@ async function main() {
 
 			if (whitelist && whitelist.includes(currentIP)) { // 检查 whitelist 是否存在再进行 includes 操作
 				console.log('😀当前IP已在白名单中，账号状态正常，停止操作！');
-				// 在账号状态正常并且当前IP在白名单中时，继续执行其他操作
+			// 在账号状态正常并且当前IP在白名单中时，继续执行其他操作
 			} else {
 				console.log('🔔当前IP不在白名单中，清空白名单并更新IP...');
 				await clearWhitelist(account);
@@ -146,7 +148,7 @@ async function main() {
 			}
 		}
 	} catch (error) {
-		console.error(`⚠️账号 ${USER} 配置错误或过期：`, error.message);
+		console.error(`⚠️账号 ${USER} 过期或配置错误：`, error.message);
 		currentAccountIndex++;
 		if (currentAccountIndex < accounts.length) {
 		console.log(`🔄切换到下一个账号：${accounts[currentAccountIndex][0]}`);
