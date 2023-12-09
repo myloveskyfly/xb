@@ -1,6 +1,6 @@
 //const $ = new Env('青龙配置文件备份还原');
 //有丢失配置的风险 自行考虑
-//青龙config.sh 填入export backup="true"变量。然后设定脚本的运行Cron定时即可。
+//青龙config.sh 填入export BACKUP="true"变量。然后设定脚本的运行Cron定时即可。
 //根据自己实际情况设定定时 比如每个小时30分钟时备份1次  30 * * * *
 /*1 1 1 1 jd_qlbackup.js*/
 const fs = require('fs').promises;
@@ -18,7 +18,7 @@ async function backupConfigFile() {
 
     const { stdout: configContent } = await execAsync(`cat ${configFilePath}`);
 
-    if (configContent.includes('export backup="true"')) {
+    if (configContent.includes('export BACKUP="true"')) {
       console.log('配置文件正常，开始执行备份');
       
       const stats = await fs.stat(configFilePath);
@@ -27,7 +27,7 @@ async function backupConfigFile() {
       await execAsync(`cp ${configFilePath} ${backupFilePath}`);
       console.log('✔️备份至青龙Config文件夹成功');
       await new Promise(resolve => setTimeout(resolve, 50));
-      console.log(`备份文件位置1： ${backupFilePath}`);
+      console.log(`备份文件位置1： ${backupFilePath}\n`);
 
       const backupDirectory = path.join(process.cwd(), 'BackUp');
       await fs.mkdir(backupDirectory, { recursive: true });
