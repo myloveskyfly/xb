@@ -22,7 +22,7 @@ async function backupConfigFile() {
       console.log('配置文件正常，开始执行备份');
       
       const stats = await fs.stat(configFilePath);
-      console.log(`配置文件大小为 ${stats.size} 字节`);
+      console.log(`配置文件大小为 ${stats.size} 字节\n`);
 
       await execAsync(`cp ${configFilePath} ${backupFilePath}`);
       console.log('✔️备份至青龙Config文件夹成功');
