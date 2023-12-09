@@ -2,7 +2,7 @@
 //有丢失配置的风险 自行考虑
 //青龙config.sh 填入export backup="true"变量。然后设定脚本的运行Cron定时即可。
 //根据自己实际情况设定定时 比如每个小时30分钟时备份1次  30 * * * *
-/* 1 1 1 1 1 jd_qlbackup.js */
+/*1 1 1 1 jd_qlbackup.js*/
 const fs = require('fs').promises;
 const util = require('util');
 const { exec } = require('child_process');
