@@ -7,8 +7,9 @@ const fs = require('fs').promises;
 const util = require('util');
 const { exec } = require('child_process');
 const path = require('path');
-
 const execAsync = util.promisify(exec);
+
+const sendNotify = require('./sendNotify');
 
 async function backupConfigFile() {
   try {
@@ -25,7 +26,7 @@ async function backupConfigFile() {
       console.log(`配置文件大小为 ${stats.size} 字节\n`);
 
       await execAsync(`cp ${configFilePath} ${backupFilePath}`);
-      console.log('✔️备份至青龙Config文件夹成功');
+      console.log('✔备份至青龙Config文件夹成功');
       await new Promise(resolve => setTimeout(resolve, 50));
       console.log(`备份文件位置1： ${backupFilePath}\n`);
 
@@ -49,7 +50,7 @@ async function backupConfigFile() {
       await fs.copyFile(backupFilePath, path.join(backupDirectory, timestampedBackupFile));
       const finalBackupFilePath = path.join(backupDirectory, timestampedBackupFile);
       await new Promise(resolve => setTimeout(resolve, 50));
-      console.log('✔️备份至当前脚本同级的BackUp文件夹内成功');
+      console.log('✔备份至当前脚本同级的BackUp文件夹内成功');
       await new Promise(resolve => setTimeout(resolve, 50));
       console.log('备份文件位置2：', finalBackupFilePath);
 
@@ -60,6 +61,7 @@ async function backupConfigFile() {
     }
   } catch (error) {
     console.error('⛔发生错误:', error);
+    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件备份还原出现错误！`);
   }
 }
 
@@ -70,9 +72,11 @@ async function restoreConfigFile() {
     const backupFilePath = path.join(configDirectory, 'config.sh.bak');
 
     await fs.copyFile(backupFilePath, configFilePath);
-    console.log('✔️配置文件已成功还原为备份文件');
+    console.log('✔配置文件已成功还原为备份文件');
+    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件已成功还原为备份文件！`);
   } catch (error) {
-    console.error('⚠️还原配置文件时发生错误:', error);
+    console.error('⚠还原配置文件时发生错误:', error);
+    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件还原配置文件时发生错误！`);
   }
 }
 
