@@ -20,7 +20,7 @@ async function backupConfigFile() {
     const { stdout: configContent } = await execAsync(`cat ${configFilePath}`);
 
     if (configContent.includes('export BACKUP="true"')) {
-      console.log('配置文件正常，开始执行备份');
+      console.log('\n配置文件正常，开始执行备份');
       
       const stats = await fs.stat(configFilePath);
       console.log(`配置文件大小为 ${stats.size} 字节\n`);
@@ -61,7 +61,7 @@ async function backupConfigFile() {
     }
   } catch (error) {
     console.error('⛔发生错误:', error);
-    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件备份还原出现错误！`);
+    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件\n备份还原出现错误！`);
   }
 }
 
@@ -73,10 +73,10 @@ async function restoreConfigFile() {
 
     await fs.copyFile(backupFilePath, configFilePath);
     console.log('✔配置文件已成功还原为备份文件');
-    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件已成功还原为备份文件！`);
+    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件\n已成功还原为备份文件！`);
   } catch (error) {
     console.error('⚠还原配置文件时发生错误:', error);
-    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件还原配置文件时发生错误！`);
+    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件\n还原配置文件时发生错误！`);
   }
 }
 
