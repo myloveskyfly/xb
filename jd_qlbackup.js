@@ -1,5 +1,5 @@
 //const $ = new Env('青龙配置文件备份还原');
-//有丢失配置的风险 自行考虑
+//某些特别环境下有丢失配置的风险自行考虑
 //青龙config.sh 填入export BACKUP="true"变量。然后设定脚本的运行Cron定时即可。
 //根据自己实际情况设定定时 比如每个小时30分钟时备份1次  30 * * * *
 /*1 1 1 1 jd_qlbackup.js*/
@@ -61,7 +61,7 @@ async function backupConfigFile() {
     }
   } catch (error) {
     console.error('⛔发生错误:', error);
-    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件\n备份还原出现错误！`);
+    await sendNotify.sendNotify(`⛔通知⛔`, `青龙配置文件\n备份还原出现错误！`);
   }
 }
 
@@ -72,8 +72,8 @@ async function restoreConfigFile() {
     const backupFilePath = path.join(configDirectory, 'config.sh.bak');
 
     await fs.copyFile(backupFilePath, configFilePath);
-    console.log('✔配置文件已成功还原为备份文件');
-    await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件\n已成功还原为备份文件！`);
+    console.log('🎉配置文件已成功还原为备份文件');
+    await sendNotify.sendNotify(`🎉通知🎉`, `青龙配置文件\n已成功还原为备份文件！`);
   } catch (error) {
     console.error('⚠还原配置文件时发生错误:', error);
     await sendNotify.sendNotify(`⚠通知⚠`, `青龙配置文件\n还原配置文件时发生错误！`);
