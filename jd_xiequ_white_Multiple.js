@@ -13,13 +13,14 @@ let currentAccountIndex = 0;
 // 获取外网IP的逻辑...
 async function getExternalIP() {
   try {
-    const response = await axios.get('https://www.taobao.com/help/getip.php');
-    const ip = response.data.match(/\d+\.\d+\.\d+\.\d+/)[0];
-    console.log('🔗获取当前外网IP:', ip); //显示获取到的IP
+    const response = await axios.get('https://www.ip.cn/api/index?ip&type=0');
+    const responseData = response.data;
+    const ip = responseData.ip;
+    console.log('🔗获取当前外网IP:', ip); // 显示获取到的IP
     return ip;
   } catch (error) {
-    console.error('🔔获取当前外网IP失败:', error.message);
-    return null;
+    console.error('🔔获取当前外网IP失败:', error);
+    return null; // 在失败情况下返回 null
   }
 }
 
@@ -110,8 +111,8 @@ async function main() {
 			currentAccountIndex++;
 			if (currentAccountIndex < accounts.length) {
 				console.log(`🔄切换到下一个账号：${accounts[currentAccountIndex][0]}`);
-		        console.log('⏰8s后切换到下一个账号');
-		        await new Promise(resolve => setTimeout(resolve, 8000));
+		        console.log('⏰15s后切换到下一个账号');
+		        await new Promise(resolve => setTimeout(resolve, 15000));
 				await main();
 			} else {
 				console.log('⛔所有账号状态异常，停止执行。');
@@ -133,8 +134,8 @@ async function main() {
         		await updateWhitelist(account, currentIP);
 				console.log('✅IP地址发生变化，已更新白名单。');
 		        // 更新白名单后8s获取最新的白名单信息并进行打印
-		        console.log('⏰8s后重新获取白名单地址');
-				await new Promise(resolve => setTimeout(resolve, 8000));
+		        console.log('⏰15s后重新获取白名单地址');
+				await new Promise(resolve => setTimeout(resolve, 15000));
 		        const updatedWhitelist = await getWhitelist(account);
 		        console.log('✅更新后的白名单地址为：', updatedWhitelist); 
 		        const maskedIp = currentIP.replace(/(\d+)\.(\d+)\.(\d+)\.(\d+)/, "$1.***.$3.$4");
@@ -150,8 +151,8 @@ async function main() {
 		currentAccountIndex++;
 		if (currentAccountIndex < accounts.length) {
 		console.log(`🔄切换到下一个账号：${accounts[currentAccountIndex][0]}`);
-	    console.log('⏰8s后切换到下一个账号');
-	    await new Promise(resolve => setTimeout(resolve, 8000));
+	    console.log('⏰15s后切换到下一个账号');
+	    await new Promise(resolve => setTimeout(resolve, 15000));
 			await main();
 		} else {
 			console.log('⛔所有账号状态异常，停止执行。');
