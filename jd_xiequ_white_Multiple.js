@@ -12,24 +12,38 @@ let currentAccountIndex = 0;
 
 // 获取外网 IP 的逻辑...
 async function getExternalIP() {
-    let retryCount = 0;
-    const maxRetries = 3;
-    while (retryCount < maxRetries) {
-        try {
-            const response = await axios.get('https://www.ip.cn/api/index?ip&type=0');
-            const responseData = response.data;
-            const ip = responseData.ip;
-            console.log('🔗获取当前外网 IP:', ip); // 显示获取到的 IP
-            return ip;
-        } catch (error) {
-            console.error('🔔获取当前外网 IP 失败，重试次数：', retryCount + 1);
-            retryCount++;
-            await new Promise(resolve => setTimeout(resolve, 2000));
+    //定义一个包含多个 API 端点的数组
+    const apiEndpoints = [
+        'https://www.ip.cn/api/index?ip&type=0',
+        'https://2024.ipchaxun.com',
+        'http://api.ipify.cn/?format=json'
+    ];
+    // 循环尝试获取 IP
+    for (const endpoint of apiEndpoints) {
+        // 定义重试次数和最大重试次数
+        let retryCount = 0;
+        const maxRetries = 3;
+        // 获取 IP
+        while (retryCount < maxRetries) {
+            try {
+                const response = await axios.get(endpoint);
+                const responseData = response.data;
+                // API 响应有一个名为 'ip' 的字段
+                const ip = responseData.ip;
+                console.log(`🔗从 ${endpoint} 获取当前外网 IP:`, ip);
+                return ip;
+
+            } catch (error) {
+                console.error(`🔔从 ${endpoint} 获取当前外网 IP 失败，重试次数：`, retryCount + 1);
+                retryCount++;
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
         }
     }
     console.error('🔔多次尝试获取外网 IP 失败，停止执行。');
     return null;
 }
+
 
 // 清空白名单的逻辑...
 async function clearWhitelist() {
@@ -103,24 +117,24 @@ async function checkAccountStatus(account) {
                     ukey: UKEY
                 }
             })
-           .then((response) => {
-                const jsonData = response.data;
-                const useValue = jsonData.data[0].use;
-                console.log('套餐类型:', jsonData.data[0].type);
-                console.log('套餐时长:', jsonData.data[0].long);
-                console.log('套餐数量:', jsonData.data[0].num);
-                console.log('已使用数量:', jsonData.data[0].use);
-                console.log('截止日期:', jsonData.data[0].enddate);
-                console.log('是否有效:', jsonData.data[0].valid + '\n');
-                return useValue;
-            })
-           .catch(error => {
-                if (jsonData.data[0].ERR || response.status === 500) {
-                    console.error(`账号 ${USER} 配置错误或者服务器异常`);
-                } else {
-                    console.error(`账号 ${USER} 请求遇到问题:`, error);
-                }
-            });
+                .then((response) => {
+                    const jsonData = response.data;
+                    const useValue = jsonData.data[0].use;
+                    console.log('套餐类型:', jsonData.data[0].type);
+                    console.log('套餐时长:', jsonData.data[0].long);
+                    console.log('套餐数量:', jsonData.data[0].num);
+                    console.log('已使用数量:', jsonData.data[0].use);
+                    console.log('截止日期:', jsonData.data[0].enddate);
+                    console.log('是否有效:', jsonData.data[0].valid + '\n');
+                    return useValue;
+                })
+                .catch(error => {
+                    if (jsonData.data[0].ERR || response.status === 500) {
+                        console.error(`账号 ${USER} 配置错误或者服务器异常`);
+                    } else {
+                        console.error(`账号 ${USER} 请求遇到问题:`, error);
+                    }
+                });
         } catch (error) {
             console.error('🔔检查账号状态失败，重试次数：', retryCount + 1);
             retryCount++;
@@ -159,7 +173,17 @@ async function main() {
             }
         } else {
             const currentIP = await getExternalIP();
+            // 检查获取到的 外网IP 是否为空
+            if (currentIP === null) {
+                console.error('🔔获取当前外网 IP 失败，停止执行。');
+                return;
+            }
+            // 检查获取到的 白名单 是否为空
             const whitelist = await getWhitelist(account);
+            if (whitelist === null) {
+                console.error('🔔获取白名单失败，停止执行。');
+                return;
+            }
             console.log('✅获取到的白名单为：', whitelist);
 
             if (whitelist && whitelist.includes(currentIP)) {
