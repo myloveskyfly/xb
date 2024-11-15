@@ -30,11 +30,11 @@ async function getExternalIP() {
                 const responseData = response.data;
                 // API 响应有一个名为 'ip' 的字段
                 const ip = responseData.ip;
-                console.log(`🔗从 ${endpoint} 获取当前外网 IP:`, ip);
+                console.log(`🔗从接口 ${endpoint} 获取当前外网IP \n✅获取到的外网IP为:`, ip);
                 return ip;
 
             } catch (error) {
-                console.error(`🔔从 ${endpoint} 获取当前外网 IP 失败，重试次数：`, retryCount + 1);
+                console.error(`🔔从接口 ${endpoint} 获取当前外网 IP 失败，重试次数：`, retryCount + 1);
                 retryCount++;
                 await new Promise(resolve => setTimeout(resolve, 2000));
             }
@@ -174,7 +174,7 @@ async function main() {
         } else {
             const currentIP = await getExternalIP();
             // 检查获取到的 外网IP 是否为空
-            if (currentIP === null) {
+            if (currentIP === undefined) {
                 console.error('🔔获取当前外网 IP 失败，停止执行。');
                 return;
             }
